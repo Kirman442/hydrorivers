@@ -278,7 +278,7 @@ colors = {river: cmap(i / len(unique_rivers))
 gdf['color'] = gdf['MAIN_RIV'].map(colors)
 
 # Plot the rivers with different colors and line widths
-fig, ax = plt.subplots(figsize=(15, 15), facecolor='none')
+fig, ax = plt.subplots(figsize=(15, 15), facecolor='black')
 gdf.plot(ax=ax, color=gdf['color'], linewidth=gdf['line_width'], alpha=1)
 # Draw the country's boundary line
 # gdf_boundary.boundary.plot(ax=ax, color='grey', linewidth=.5)
@@ -319,6 +319,7 @@ if country_flag == 1:
 # gdf_point.plot(ax=ax, markersize = 100, alpha=.5)
 
 # Set background color behind the lines to transparent
+ax.set_axis_off()
 ax.patch.set_facecolor('none')
 
 
