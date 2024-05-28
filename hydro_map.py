@@ -18,6 +18,7 @@ from shapely.geometry import Point
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 from PIL import Image, ImageDraw, ImageFont
 
+# if no exists make data dir in project directory
 data_folder = 'data'
 if not os.path.exists(data_folder):
     os.makedirs(data_folder)
@@ -35,8 +36,8 @@ start_time = time.time()
 print("start --- %s seconds ---" % (time.time() - start_time))
 
 
-# Add here path to you shp
-shapefile_path = r'm:\projekte\Hydrosherds\HydroRIVERS_v10_eu_shp\HydroRIVERS_v10_eu_shp\HydroRIVERS_v10_eu.shp'
+
+shapefile_path = r'Add here path to you shp'
 
 # Extract the file name with extension
 file_name = os.path.splitext(os.path.basename(shapefile_path))[0] + '.feather'
