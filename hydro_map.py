@@ -179,193 +179,193 @@ print("check_continent_file_exists --- %s seconds ---" %
 print(gdf.iloc[0])
 print(gdf.iloc[0:20])
 
-# print('Make map from country boundarys?: 1 - Yes, 0 - No')
-# country_map = None
-# while country_map not in {0, 1}:
-#     country_map = int(input("Please type the matching number: "))
+print('Make map from country boundarys?: 1 - Yes, 0 - No')
+country_map = None
+while country_map not in {0, 1}:
+    country_map = int(input("Please type the matching number: "))
 
-# country_flag = None
-# if country_map == 1:
-#     # country_flag = None
-#     print('Add country flag as capital marker to the map?: 1 - Yes, 0 - No')
-#     while country_flag not in {0, 1}:
-#         country_flag = int(input("Please type the matching number: "))
-
-
-# if country_map == 1:
-#     picture_file_path = os.path.join(
-#         data_folder, f'{country}.png'.replace(' ', '_'))
-#     url = "https://mrgallo.github.io/python-fundamental-exercises/_downloads/d1feb1a136dc985fbab706d3092281ab/country-by-capital-city.json"
-
-#     with urllib.request.urlopen(url) as response:
-#         data = response.read().decode('utf-8')
-#         country_capitals = json.loads(data)
-
-#     def get_capital(country_name):
-#         for country in country_capitals:
-#             if country["country"] == country_name:
-#                 return country["city"]
-#         return "Country not found"
-
-#     capital = get_capital(country)
-#     print(f"The capital of {country} is {capital}")
-
-#     country_capital = ox.geocode_to_gdf(capital)
-#     first_row = country_capital.iloc[0]
-
-#     lat = first_row['lat']
-#     lon = first_row['lon']
-#     print("Latitude:", lat)
-#     print("Longitude:", lon)
-#     point = Point(lon, lat)
-
-#     # Convert lat/lon to dms coordinates
-#     lat = deg_to_dms(lat, pretty_print='latitude')
-#     lon = deg_to_dms(lon, pretty_print='longitude')
-#     coords = f"{lat} / {lon}"
-
-#     if not check_file_exists(data_folder, country_file_name):
-#         gdf_boundary = ox.geocode_to_gdf(country)
-#         gdf_boundary = ensure_fid_column(gdf_boundary)
-#         gdf_boundary.to_feather(os.path.join(
-#             data_folder, country_file_name))
-#     else:
-#         gdf_boundary = gpd.read_feather(os.path.join(
-#             data_folder, country_file_name))
-#     print("check_country_file_exists --- %s seconds ---" %
-#           (time.time() - start_time))
-
-#     gdf = gpd.sjoin(gdf, gdf_boundary, how='inner', predicate='within')
-#     # gdf.to_file("test.gdf", driver="GPKG")
-# # print("Start read_file--- %s seconds ---" %
-# #       (time.time() - start_time))
-# # gdf = gpd.read_file("test.gdf")
-# # print("End read_file--- %s seconds ---" %
-# #       (time.time() - start_time))
-# def add_inscription(image, city_name, text_position, country_map=None):  # coordinates
-#     """
-#     Add inscriptions to the image.
-#     """
-#     # Make image with the same size as original to compose them later together
-#     text_image = Image.new("RGBA", image.size, (255, 255, 255, 0))
-#     draw_text = ImageDraw.Draw(text_image)
-#     picWidth, picHeight = image.size
-#     if picWidth > picHeight:
-#         fontsize = int(picHeight * 140 / picWidth)
-#     else:
-#         fontsize = int(picWidth * 140 / picHeight)
-#     font = ImageFont.truetype("arial.ttf", size=fontsize)
-
-#     if text_position == 'right':
-#         city_name_coord = (picWidth*.8, picHeight * .9)
-
-#     else:
-#         city_name_coord = (picWidth * .15, picHeight * .9)
-
-#     # Draw country info
-#     if country_map == 1:
-#         draw_text.text(city_name_coord, f"{continent}\nCountry: {country}\nCapital: {capital}\n\n{coords}", font=font, fill='#ffffff90',
-#                        anchor="ms",  spacing=8, stroke_width=3, stroke_fill='#ABBFC899')
-#     else:
-#         draw_text.text(city_name_coord, f"{continent}", font=font, fill='#ffffff90',
-#                        anchor="ms",  spacing=8, stroke_width=3, stroke_fill='#ABBFC899')
-#     final_image = Image.alpha_composite(
-#         image.convert("RGBA"), text_image.convert("RGBA"))
-
-#     # return text with gradient and base image
-#     return final_image.convert('RGBA')
+country_flag = None
+if country_map == 1:
+    # country_flag = None
+    print('Add country flag as capital marker to the map?: 1 - Yes, 0 - No')
+    while country_flag not in {0, 1}:
+        country_flag = int(input("Please type the matching number: "))
 
 
-# # Filter the GeoDataFrame based on a condition
-# # If there are too many rivers, you can play with the parameters
-# # Replace with your desired value based on these columns. See HydroRIVERS Technical Documentation
-# """
-# UPLAND_SKM, ORD_STRA, ORD_CLAS, ORD_FLOW
-# """
+if country_map == 1:
+    picture_file_path = os.path.join(
+        data_folder, f'{country}.png'.replace(' ', '_'))
+    url = "https://mrgallo.github.io/python-fundamental-exercises/_downloads/d1feb1a136dc985fbab706d3092281ab/country-by-capital-city.json"
 
+    with urllib.request.urlopen(url) as response:
+        data = response.read().decode('utf-8')
+        country_capitals = json.loads(data)
 
-# # condition = (gdf['UPLAND_SKM'] > 10) & (gdf['ORD_FLOW'] <= 5)
-# # gdf = gdf[condition]
+    def get_capital(country_name):
+        for country in country_capitals:
+            if country["country"] == country_name:
+                return country["city"]
+        return "Country not found"
 
+    capital = get_capital(country)
+    print(f"The capital of {country} is {capital}")
 
-# # Apply the normalization function to the UPLAND_SKM field
-# gdf['line_width'] = gdf['UPLAND_SKM'].apply(normalize_width)
+    country_capital = ox.geocode_to_gdf(capital)
+    first_row = country_capital.iloc[0]
 
+    lat = first_row['lat']
+    lon = first_row['lon']
+    print("Latitude:", lat)
+    print("Longitude:", lon)
+    point = Point(lon, lat)
 
-# # Assign a color to each unique MAIN_RIV
-# unique_rivers = gdf['MAIN_RIV'].unique()
-# cmap = colormaps['Set2']  # You can choose a different colormap
-# colors = {river: cmap(i / len(unique_rivers))
-#           for i, river in enumerate(unique_rivers)}
+    # Convert lat/lon to dms coordinates
+    lat = deg_to_dms(lat, pretty_print='latitude')
+    lon = deg_to_dms(lon, pretty_print='longitude')
+    coords = f"{lat} / {lon}"
 
-# print("Assign a color to each unique MAIN_RIV--- %s seconds ---" %
+    if not check_file_exists(data_folder, country_file_name):
+        gdf_boundary = ox.geocode_to_gdf(country)
+        gdf_boundary = ensure_fid_column(gdf_boundary)
+        gdf_boundary.to_feather(os.path.join(
+            data_folder, country_file_name))
+    else:
+        gdf_boundary = gpd.read_feather(os.path.join(
+            data_folder, country_file_name))
+    print("check_country_file_exists --- %s seconds ---" %
+          (time.time() - start_time))
+
+    gdf = gpd.sjoin(gdf, gdf_boundary, how='inner', predicate='within')
+    # gdf.to_file("test.gdf", driver="GPKG")
+# print("Start read_file--- %s seconds ---" %
 #       (time.time() - start_time))
+# gdf = gpd.read_file("test.gdf")
+# print("End read_file--- %s seconds ---" %
+#       (time.time() - start_time))
+def add_inscription(image, city_name, text_position, country_map=None):  # coordinates
+    """
+    Add inscriptions to the image.
+    """
+    # Make image with the same size as original to compose them later together
+    text_image = Image.new("RGBA", image.size, (255, 255, 255, 0))
+    draw_text = ImageDraw.Draw(text_image)
+    picWidth, picHeight = image.size
+    if picWidth > picHeight:
+        fontsize = int(picHeight * 140 / picWidth)
+    else:
+        fontsize = int(picWidth * 140 / picHeight)
+    font = ImageFont.truetype("arial.ttf", size=fontsize)
 
-# # Create a new column 'color' and set the colors based on MAIN_RIV
-# gdf['color'] = gdf['MAIN_RIV'].map(colors)
+    if text_position == 'right':
+        city_name_coord = (picWidth*.8, picHeight * .9)
 
-# # Plot the rivers with different colors and line widths
-# fig, ax = plt.subplots(figsize=(15, 15), facecolor='none')
-# print("Create subplots --- %s seconds ---" % (time.time() - start_time))
-# gdf.plot(ax=ax, color=gdf['color'], linewidth=gdf['line_width'], alpha=1)
-# # Draw the country's boundary line
-# # gdf_boundary.boundary.plot(ax=ax, color='grey', linewidth=.5)
-# print("Create plot --- %s seconds ---" % (time.time() - start_time))
+    else:
+        city_name_coord = (picWidth * .15, picHeight * .9)
 
-# if country_flag == 1:
-#     # get country code to download the flag image of the country
-#     url = "https://flagcdn.com/en/codes.json"
+    # Draw country info
+    if country_map == 1:
+        draw_text.text(city_name_coord, f"{continent}\nCountry: {country}\nCapital: {capital}\n\n{coords}", font=font, fill='#ffffff90',
+                        anchor="ms",  spacing=8, stroke_width=3, stroke_fill='#ABBFC899')
+    else:
+        draw_text.text(city_name_coord, f"{continent}", font=font, fill='#ffffff90',
+                        anchor="ms",  spacing=8, stroke_width=3, stroke_fill='#ABBFC899')
+    final_image = Image.alpha_composite(
+        image.convert("RGBA"), text_image.convert("RGBA"))
 
-#     with urllib.request.urlopen(url) as response:
-#         data = response.read().decode('utf-8')
-#         country_codes = json.loads(data)
-
-#     def get_counry_code(country_name):
-#         for keys, values in country_codes.items():
-#             if values == country_name:
-#                 return keys
-#         return "Country not found"
-#     country_code = get_counry_code(country)
-
-#     # Inserting the country code into the flag url and uploading the flag image
-#     flag_url = f"https://flagcdn.com/w160/{country_code}.jpg"
-#     with urllib.request.urlopen(flag_url) as url:
-#         flag_image = Image.open(url)
-
-#     # Show Capital on the map as flag image
-#     # Adding an image to a chart
-#     imagebox = OffsetImage(flag_image, zoom=0.1)
-#     imagebox.image.axes = ax
-#     # Creating a dictionary with parameters for the frame
-#     bbox_props = dict(boxstyle="round,pad=0.1",
-#                       edgecolor="blue", facecolor="white", linewidth=0.5)
-#     ab = AnnotationBbox(imagebox, (point.x, point.y),
-#                         frameon=True, bboxprops=bbox_props)
-#     ax.add_artist(ab)
-
-# # Show Capital on the map as point
-# # gdf_point = gpd.GeoDataFrame([{'geometry': point}], crs="EPSG:4326")
-# # gdf_point.plot(ax=ax, markersize = 100, alpha=.5)
-
-# # Set background color behind the lines to transparent
-# ax.patch.set_facecolor('none')
+    # return text with gradient and base image
+    return final_image.convert('RGBA')
 
 
-# plt.savefig(output_file_path, dpi=600, bbox_inches='tight', transparent=True)
+# Filter the GeoDataFrame based on a condition
+# If there are too many rivers, you can play with the parameters
+# Replace with your desired value based on these columns. See HydroRIVERS Technical Documentation
+"""
+UPLAND_SKM, ORD_STRA, ORD_CLAS, ORD_FLOW
+"""
 
-# rivers_image = Image.open(output_file_path).convert("RGBA")
-# output_image = draw_frame(rivers_image)  # picture
-# image_with_inscription = add_inscription(
-#     output_image, continent, text_pos, country_map)
-# print("add all inscription--- %s seconds ---" % (time.time() - start_time))
+
+# condition = (gdf['UPLAND_SKM'] > 10) & (gdf['ORD_FLOW'] <= 5)
+# gdf = gdf[condition]
 
 
-# composite_images(rivers_image, image_with_inscription, picture_file_path)
-# print("composite_images--- %s seconds ---" % (time.time() - start_time))
+# Apply the normalization function to the UPLAND_SKM field
+gdf['line_width'] = gdf['UPLAND_SKM'].apply(normalize_width)
 
-# # Delete permanent image file
-# os.remove(os.path.join(data_folder, output_file))
 
-# plt.show()
+# Assign a color to each unique MAIN_RIV
+unique_rivers = gdf['MAIN_RIV'].unique()
+cmap = colormaps['Set2']  # You can choose a different colormap
+colors = {river: cmap(i / len(unique_rivers))
+          for i, river in enumerate(unique_rivers)}
+
+print("Assign a color to each unique MAIN_RIV--- %s seconds ---" %
+      (time.time() - start_time))
+
+# Create a new column 'color' and set the colors based on MAIN_RIV
+gdf['color'] = gdf['MAIN_RIV'].map(colors)
+
+# Plot the rivers with different colors and line widths
+fig, ax = plt.subplots(figsize=(15, 15), facecolor='none')
+print("Create subplots --- %s seconds ---" % (time.time() - start_time))
+gdf.plot(ax=ax, color=gdf['color'], linewidth=gdf['line_width'], alpha=1)
+# Draw the country's boundary line
+# gdf_boundary.boundary.plot(ax=ax, color='grey', linewidth=.5)
+print("Create plot --- %s seconds ---" % (time.time() - start_time))
+
+if country_flag == 1:
+    # get country code to download the flag image of the country
+    url = "https://flagcdn.com/en/codes.json"
+
+    with urllib.request.urlopen(url) as response:
+        data = response.read().decode('utf-8')
+        country_codes = json.loads(data)
+
+    def get_counry_code(country_name):
+        for keys, values in country_codes.items():
+            if values == country_name:
+                return keys
+        return "Country not found"
+    country_code = get_counry_code(country)
+
+    # Inserting the country code into the flag url and uploading the flag image
+    flag_url = f"https://flagcdn.com/w160/{country_code}.jpg"
+    with urllib.request.urlopen(flag_url) as url:
+        flag_image = Image.open(url)
+
+    # Show Capital on the map as flag image
+    # Adding an image to a chart
+    imagebox = OffsetImage(flag_image, zoom=0.1)
+    imagebox.image.axes = ax
+    # Creating a dictionary with parameters for the frame
+    bbox_props = dict(boxstyle="round,pad=0.1",
+                      edgecolor="blue", facecolor="white", linewidth=0.5)
+    ab = AnnotationBbox(imagebox, (point.x, point.y),
+                        frameon=True, bboxprops=bbox_props)
+    ax.add_artist(ab)
+
+# Show Capital on the map as point
+# gdf_point = gpd.GeoDataFrame([{'geometry': point}], crs="EPSG:4326")
+# gdf_point.plot(ax=ax, markersize = 100, alpha=.5)
+
+# Set background color behind the lines to transparent
+ax.patch.set_facecolor('none')
+
+
+plt.savefig(output_file_path, dpi=600, bbox_inches='tight', transparent=True)
+
+rivers_image = Image.open(output_file_path).convert("RGBA")
+output_image = draw_frame(rivers_image)  # picture
+image_with_inscription = add_inscription(
+    output_image, continent, text_pos, country_map)
+print("add all inscription--- %s seconds ---" % (time.time() - start_time))
+
+
+composite_images(rivers_image, image_with_inscription, picture_file_path)
+print("composite_images--- %s seconds ---" % (time.time() - start_time))
+
+# Delete permanent image file
+os.remove(os.path.join(data_folder, output_file))
+
+plt.show()
 
 print("All done --- %s seconds ---" % (time.time() - start_time))
