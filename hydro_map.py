@@ -18,7 +18,6 @@ from matplotlib import colormaps
 from shapely.geometry import Point
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 from PIL import Image, ImageDraw, ImageFont
-import pandas as pd
 
 data_folder = 'data'
 if not os.path.exists(data_folder):
@@ -32,7 +31,6 @@ picture_file_path = os.path.join(
 
 country = "France"
 text_pos = 'left'
-pd.options.display.max_columns = None
 
 start_time = time.time()
 print("start --- %s seconds ---" % (time.time() - start_time))
@@ -42,8 +40,6 @@ shapefile_path = r'm:\projekte\Hydrosherds\HydroRIVERS_v10_eu_shp\HydroRIVERS_v1
 # Extract the file name with extension
 file_name = os.path.splitext(os.path.basename(shapefile_path))[0] + '.feather'
 country_file_name = country.replace(' ', '_') + '.feather'
-
-print("get_capital_info --- %s seconds ---" % (time.time() - start_time))
 
 
 def check_file_exists(directory, filename):
@@ -164,20 +160,10 @@ def deg_to_dms(deg, pretty_print=None):
 
 if not check_file_exists(data_folder, file_name):
     gdf = gpd.read_file(shapefile_path)
-    print("read shp file europe --- %s seconds ---" %
-          (time.time() - start_time))
     gdf = ensure_fid_column(gdf)
-    print("ensure_fid_column gdf europe --- %s seconds ---" %
-          (time.time() - start_time))
     gdf.to_feather(os.path.join(data_folder, file_name))
-    print("to_feather gdf europe --- %s seconds ---" %
-          (time.time() - start_time))
 else:
     gdf = gpd.read_feather(os.path.join(data_folder, file_name))
-print("check_continent_file_exists --- %s seconds ---" %
-      (time.time() - start_time))
-print(gdf.iloc[0])
-print(gdf.iloc[0:20])
 
 print('Make map from country boundarys?: 1 - Yes, 0 - No')
 country_map = None
@@ -208,15 +194,11 @@ if country_map == 1:
         return "Country not found"
 
     capital = get_capital(country)
-    print(f"The capital of {country} is {capital}")
-
     country_capital = ox.geocode_to_gdf(capital)
     first_row = country_capital.iloc[0]
 
     lat = first_row['lat']
     lon = first_row['lon']
-    print("Latitude:", lat)
-    print("Longitude:", lon)
     point = Point(lon, lat)
 
     # Convert lat/lon to dms coordinates
@@ -232,16 +214,10 @@ if country_map == 1:
     else:
         gdf_boundary = gpd.read_feather(os.path.join(
             data_folder, country_file_name))
-    print("check_country_file_exists --- %s seconds ---" %
-          (time.time() - start_time))
 
     gdf = gpd.sjoin(gdf, gdf_boundary, how='inner', predicate='within')
-    # gdf.to_file("test.gdf", driver="GPKG")
-# print("Start read_file--- %s seconds ---" %
-#       (time.time() - start_time))
-# gdf = gpd.read_file("test.gdf")
-# print("End read_file--- %s seconds ---" %
-#       (time.time() - start_time))
+
+
 def add_inscription(image, city_name, text_position, country_map=None):  # coordinates
     """
     Add inscriptions to the image.
@@ -298,19 +274,14 @@ cmap = colormaps['Set2']  # You can choose a different colormap
 colors = {river: cmap(i / len(unique_rivers))
           for i, river in enumerate(unique_rivers)}
 
-print("Assign a color to each unique MAIN_RIV--- %s seconds ---" %
-      (time.time() - start_time))
-
 # Create a new column 'color' and set the colors based on MAIN_RIV
 gdf['color'] = gdf['MAIN_RIV'].map(colors)
 
 # Plot the rivers with different colors and line widths
 fig, ax = plt.subplots(figsize=(15, 15), facecolor='none')
-print("Create subplots --- %s seconds ---" % (time.time() - start_time))
 gdf.plot(ax=ax, color=gdf['color'], linewidth=gdf['line_width'], alpha=1)
 # Draw the country's boundary line
 # gdf_boundary.boundary.plot(ax=ax, color='grey', linewidth=.5)
-print("Create plot --- %s seconds ---" % (time.time() - start_time))
 
 if country_flag == 1:
     # get country code to download the flag image of the country
@@ -357,11 +328,9 @@ rivers_image = Image.open(output_file_path).convert("RGBA")
 output_image = draw_frame(rivers_image)  # picture
 image_with_inscription = add_inscription(
     output_image, continent, text_pos, country_map)
-print("add all inscription--- %s seconds ---" % (time.time() - start_time))
 
 
 composite_images(rivers_image, image_with_inscription, picture_file_path)
-print("composite_images--- %s seconds ---" % (time.time() - start_time))
 
 # Delete permanent image file
 os.remove(os.path.join(data_folder, output_file))
