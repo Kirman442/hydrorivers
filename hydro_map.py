@@ -4,6 +4,7 @@ Created on Wed May 22 18:45:27 2024
 
 @author: Kirill
 """
+# add new info
 
 import json
 import urllib.request
