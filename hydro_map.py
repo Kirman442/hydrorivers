@@ -4,7 +4,6 @@ Created on Wed May 22 18:45:27 2024
 
 @author: Kirill
 """
-# add new info
 
 import json
 import urllib.request
@@ -35,6 +34,8 @@ text_pos = 'left'
 start_time = time.time()
 print("start --- %s seconds ---" % (time.time() - start_time))
 
+
+# Add here path to you shp
 shapefile_path = r'm:\projekte\Hydrosherds\HydroRIVERS_v10_eu_shp\HydroRIVERS_v10_eu_shp\HydroRIVERS_v10_eu.shp'
 
 # Extract the file name with extension
