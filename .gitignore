@@ -1,0 +1,22 @@
+# HydroRIVERS downloads and converted data are large; keep them out of git
+data/*
+!data/*.jpg
+maps/
+*.parquet
+*.feather
+*.gpkg
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.gdb/
+cache/
+
+# Python / IDE
+__pycache__/
+*.pyc
+.spyproject/
+.ipynb_checkpoints/
+.vscode/
+.idea/
