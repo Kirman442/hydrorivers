@@ -41,10 +41,21 @@ def _cached(cache_dir: Path, filename: str) -> Path:
     return path
 
 
+def _load(cache_dir: Path, filename: str, columns: list[str]) -> gpd.GeoDataFrame:
+    """Natural Earth layer from a Parquet copy; the GeoJSON is parsed only once.
+
+    Reading the 13 MB GeoJSON takes about a second, the Parquet copy a tenth of that.
+    """
+    parquet = cache_dir / (Path(filename).stem + ".parquet")
+    if not parquet.exists():
+        gdf = gpd.read_file(_cached(cache_dir, filename))
+        gdf.to_parquet(parquet, compression="zstd")
+    return gpd.read_parquet(parquet, columns=columns + ["geometry"])
+
+
 def find_country(name: str, cache_dir: Path) -> Country:
     """Look a country up by name (English, German or Russian) or ISO code."""
-    countries = gpd.read_file(_cached(cache_dir, NE_COUNTRIES),
-                              columns=NAME_COLUMNS + ["CONTINENT"])
+    countries = _load(cache_dir, NE_COUNTRIES, NAME_COLUMNS + ["CONTINENT"])
     key = name.strip().casefold()
     match = countries[NAME_COLUMNS].apply(
         lambda col: col.astype(str).str.casefold() == key).any(axis=1)
@@ -56,8 +67,8 @@ def find_country(name: str, cache_dir: Path) -> Country:
         raise SystemExit(f"Country '{name}' not found in Natural Earth.{hint}")
     row = hit.iloc[0]
 
-    places = gpd.read_file(_cached(cache_dir, NE_PLACES),
-                           columns=["name", "featurecla", "adm0_a3", "longitude", "latitude"])
+    places = _load(cache_dir, NE_PLACES,
+                   ["name", "featurecla", "adm0_a3", "longitude", "latitude"])
     caps = places[(places["adm0_a3"] == row["ADM0_A3"])
                   & places["featurecla"].str.startswith("Admin-0 capital")]
     caps = caps.sort_values("featurecla")  # 'Admin-0 capital' before '... alt'
